@@ -187,6 +187,7 @@ class FruitController extends Controller {
     $fruits_array = [];
     foreach ($fruits as $f) {
       $fruit_array = [
+        'id' => $f->getId(),
         'name' => $f->getName(),
         'origin' => $f->getOrigin(),
         'eatable' => $f->getEatable(),
@@ -203,4 +204,5 @@ class FruitController extends Controller {
     $fruits_json = json_encode($fruits_array);
     return new Response($fruits_json);
  }
+
 }

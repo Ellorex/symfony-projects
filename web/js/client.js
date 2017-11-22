@@ -16,11 +16,13 @@ $(document).ready(function() {
   var fruitDisplay  = appHtml.find('div#fruitDisplay');
   var displaySelect = appHtml.find('select#displaySelect');
 
+
   // 2. fonctions
 
   function init() {
     ajaxFruitList(); //appelle la fonction de récupération des fruits
   }
+
   var ajaxFn = function() {
 
     // Une requête serveur de redirection est envoyée. Lorsque la réponse est reçue, alors la fonction du deuxieme argument est effectuée
@@ -38,17 +40,24 @@ $(document).ready(function() {
     });
   }
 
-  var ajaxFruitList = function () {
+  var ajaxFruitList = function() {
     // si les données ne sont pas déjà stockées, on les demande au serveur
     if (!app.data.fruits) {
       $.get(app.server + '/fruits/api/list', function(res2) {
         var fruits = JSON.parse(res2);
         app.data.fruits = fruits;
         fruitDisplay.html(transformToHtml(fruits, displaySelect.val()));
+        $('span.displayFruit').click(function() {
+          console.log('zozo');
+        });
 
       });
     } else {
       fruitDisplay.html(transformToHtml(app.data.fruits, displaySelect.val()));
+      $('span.displayFruit').click(function() {
+        console.log('zozo');
+      });
+
     }
   }
 
@@ -64,7 +73,7 @@ $(document).ready(function() {
 
     if (type == 'table') {
 
-      output += '<table class="table table-bordered">';
+      output += '<table id="fruitTable" class="table table-bordered">';
       output += '<tr>';
       output += '<th>' + 'Nom' + '</th>';
       output += '<th>' + 'Origine' + '</th>';
@@ -75,7 +84,7 @@ $(document).ready(function() {
       // itération sur fruits
       fruits.forEach(function(fruit) {
         output += '<tr>';
-        output += '<td>' + fruit.name + '</td>';
+        output += '<td><span class="displayFruit">' + fruit.name + '</span></td>';
         output += '<td>' + fruit.origin + '</td>';
         if (fruit.eatable == true) {
           output += '<td>' + "Oui" + '</td>';
@@ -95,9 +104,16 @@ $(document).ready(function() {
   }
   // 3. événements
   // au clic sur le bouton btnTestAjax, la fonction ajaxFn est déclenchée
+  var displayFruit  = appHtml.find('span.displayFruit');
+
+  var fruitDetails = function() {
+    console.log('HJHUHU');
+  }
+
   btnTestAjax.click(ajaxFn);
   btnFruitList.click(ajaxFruitList);
   displaySelect.change(ajaxFruitList);
+  // displayFruit.click(fruitDetails);
 
   init();
 });
