@@ -1,0 +1,10 @@
+{% extends "::base.html.twig" %}
+
+{% block body %}
+<h2>Liste des catégories</h2>
+
+<a href="{{ path('add_category') }}">Ajouter une catégorie</a>
+{% for c in category %}
+  <div>{{ c.name }}</div>
+{% endfor %}
+{% endblock %}

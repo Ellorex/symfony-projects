@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<h2>Fruits</h2>
+
+<button type="button" id="btnHideForm" name="button" class="btn">Masquer le formulaire</button>
+
+
+<form class="form-inline well" method="POST" id="form">
+  <div class="form-group">
+    <label for="name"></label>
+    <input type="text" name="name" placeholder="Exemple : poire">
+  </div>
+  <div class="form-group">
+    <label for="origin">Origine</label>
+    <input type="text" name="origin" placeholder="Exemple : Espagne">
+  </div>
+  <div>
+    <select name="producer_id">
+      <option value="0">Sélectionner un producteur</option>
+      {% for p in producer_id %}
+          <option value="{{ p.id }}">{{ p.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+    <br>
+    <div name="form-group">
+      <span>Catégorie-s :</span>
+      {% for c in category %}
+      <!-- crochets pour stocker les id des cases cochées dans un tableau. Si sans crochets, alors uniquement la dernière valeur est prise en compte  -->
+          <input name="categories[]" type="checkbox" value="{{ c.id }}">{{ c.name }}
+      {% endfor %}
+    </div>
+
+  <div class="form-group">
+    <label for="eatable">Comestible</label>
+    <input type="checkbox" name="eatable">
+  </div>
+  <input type="submit" name="submit" value="Enregistrer">
+</form>
+
+<hr>
+
+<table class="table table-bordered table-striped">
+  <tr>
+    <th>Nom</th>
+    <th>Origine</th>
+    <th>Comestible</th>
+    <th>Producteur</th>
+    <th>Détaillant</th>
+    <th>Catégories</th>
+    <th>Actions</th>
+  </tr>
+  {% for f in fruits %}
+    <tr>
+      <td><a href="{{ path('fruit_details', {'id' : f.id }) }}" class="btn btn-default btn-xs">{{ f.name }}</a></td>
+      <td>{{ f.origin }}</td>
+        {% if f.eatable == 1 %} <td>Oui</td>
+        {% else %}
+            <td>Non</td>
+        {% endif %}
+      <td>
+        <!-- if car il se peut qu'un fruit n'ait pas de producteur mais null impossible -->
+        {% if f.producer %}
+          <a href="{{ path('producer_details', {'id' : f.producer.id }) }}" class="btn btn-default btn-xs">{{ f.producer.name }}</a>
+        {% endif %}
+
+      </td>
+      <td>
+        {% if f.retailors | length > 0 %}
+          {% for r in f.retailors %}
+              {{ r.name }}
+          {% endfor %}
+        {% endif %}
+      </td>
+      <td>
+        {% if f.category | length > 0 %}
+          {% for c in f.category %}
+            <p>{{ c.name }}</p>
+          {% endfor %}
+        {% endif %}
+      </td>
+      <td>
+          <a href="{{ path('fruit_update', {'id' : f.id }) }}" class="btn btn-warning btn-xs">Modifier</a>
+          <a href="{{ path('fruit_delete', {'id' : f.id }) }}" class="btn btn-danger btn-xs">Supprimer</a>
+      </td>
+    </tr>
+  {% endfor %}
+</table>
+
+{% endblock body %}
+{% block js %}
+  <script type="text/javascript" src="{{asset('js/script.js')}}">
+
+  </script>
+{% endblock js %}

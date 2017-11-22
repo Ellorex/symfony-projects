@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+{% endblock styles %}
+
+{% block body %}
+  <table class="table table-striped table-bordered">
+    {% for f in fruits %}
+    <tr>
+      <td>{{f.name}}</td>
+      <td>{{f.origin}}</td>
+      <td>{% if not f.eatable %}
+        <span class="not-eatable">Tu vas mourir</span>
+      {% endif %}</td>
+    </tr>
+    {% endfor %}
+  </table>
+{% endblock body %}

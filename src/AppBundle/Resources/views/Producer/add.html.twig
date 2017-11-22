@@ -1,0 +1,30 @@
+{% extends "::base.html.twig" %}
+
+{% block body %}
+
+<h2>Ajout d'un producteur</h2>
+
+{{ form_start(addform) }}
+
+  <div class="form-group">
+    {{ form_label(addform.name, 'Nom : ') }}
+    {{ form_errors(addform.name) }}
+    {{ form_widget(addform.name) }}
+  </div>
+  <div class="form-group">
+    {{ form_label(addform.email, 'Email : ') }}
+    {{ form_errors(addform.email) }}
+    {{ form_widget(addform.email, {'attr' : {'class' : 'perso', 'placeholder' : 'exemple@mail.com'}} ) }}
+  </div>
+  <div class="form-group">
+    {{ form_label(addform.logo) }}
+    {{ form_widget(addform.logo) }}
+  </div>
+  <div class="form-group">
+    {{ form_label(addform.submit) }}
+    {{ form_widget(addform.submit, {'attr' : {'class' : 'btn btn-xs' }}) }}
+  </div>
+
+{{ form_end(addform) }}
+
+{% endblock %}

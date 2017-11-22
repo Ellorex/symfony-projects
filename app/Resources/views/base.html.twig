@@ -1,0 +1,67 @@
+{# Ceci est un commentaire twig. Inline ou block. #}
+
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Intro Symfony</title>
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />      <!-- asset se place dans le folder web -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+
+<style>
+       /*ul {
+        cursor:pointer;
+        }
+        li:hover > ul {
+          display:block !important;
+       }*/
+        .submenu {
+          display: none;
+          position: absolute;
+          top: 32px;
+          left: 15px;
+          background-color: #CCC;
+          padding: 8px;
+          list-style: none;
+          border-radius: 4px
+        }
+
+        nav ul > li {
+          position: relative
+        }
+
+        li:hover > ul.submenu {
+          display:block
+        }
+        </style>
+
+        {% block styles %}{% endblock %}
+        <!-- avec ce bloc, les enfants peuvent avoir leur propre style -->
+    </head>
+    <body>
+
+      <nav>
+        <ul class="nav nav-tabs">
+          <li><a href="{{ path('homepage') }}">Accueil</a></li>
+          <li><a href="{{ path('index_category') }}">Catégories</a></li>
+          <li><a href="{{ path('fruit_admin_page') }}">Fruits</a></li>
+          <li><a href="{{ path('producer_index') }}">Producteurs</a></li>
+          <li><a href="{{ path('retailor_index') }}">Détaillants</a></li>
+          <li><a href="#">Test</a>
+        <ul class="submenu">
+          <li><a href="{{ path('fruits_page') }}">Fruits</a></li>
+          <li><a href="{{ path('example_page') }}">Example</a></li>
+          <li><a href="{{ path('eatable_page') }}">Comestibles</a></li>
+
+            </ul>
+          </li>
+
+        </ul>
+      </nav>
+      <!-- les blocs doivent être implémentés au niveau de l'enfant mais peuvent être écrasés au niveau des template enfants donc à laisser vides-->
+        {% block body %}{% endblock %}
+        <script type="text/javascript" src="{{asset('js/jquery-3.2.1.min.js')}}"></script>
+
+        {% block js %}{% endblock js %}
+    </body>
+</html>

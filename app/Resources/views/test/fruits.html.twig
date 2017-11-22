@@ -1,0 +1,66 @@
+
+{% extends 'base.html.twig' %}
+  {% block body %}
+
+<!-- <h1>Liste de fruits (dynamic version) :</h1>
+la double accolade permet l'accès en lecture twig
+accolades et pourcentages : permet les instructions de type bloc. Foreach = for en twig
+variable qui va être exécutée à chaque instruction d'abord, changement de syntaxe.
+-->
+
+<h1>{{ title }}</h1>
+
+<p>Message en provenance du controlleur {{message}}</p>
+
+<ul>
+<!--  fruits = élément du tableau associatif en paramètre du render de fruitsAction-->
+  {% for fruit in fruits %}
+  <li>{{ fruit }}</li>
+  {% endfor %}
+</ul>
+
+<select>
+  {% for f in fruits2 %}
+  <option>{{f.name}}</option>
+  {% endfor %}
+</select>
+
+
+<table class="table table-bordered table-striped">
+    {% for f in fruits2 %}
+      <tr>
+        <td>{{f.name}}</td>
+        <td>{{f.origin}}</td>
+        <td>{% if not f.eatable == true %} <span>non</span> {% endif %} comestible</td>
+      </tr>
+    {% endfor %}
+</table>
+
+<!-- if f.comestible == true
+et
+if f.comestible s
+ont équivalent -->
+
+<table class="table table-bordered table-striped">
+    <tr>
+      <th>Nom</th>
+      <th>Origine</th>
+      <th>Comestible</th>
+      <th>Wiki</th>
+    </tr>
+    {% for f in fruits3 %}
+    <tr>
+      <td>{{ f.name }}</td>
+      <td>{{ f.getOrigin() }}</td>
+      <td>{% if f.eatable == true %} <span>Aucun risque connu</span> {%else%} <span class="not-eatable">Attention danger</span> {% endif %} </td>
+      <td>{% if f.wiki == true %} <a href="{{f.wiki}}">{{f.name}}</a>{% endif %}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% if tata %}
+<p>Toto est vrai</p>
+{% else %}
+<p>Toto n'est pas vrai (parce que false ou NULL)</p>
+{% endif %}
+{% endblock %}

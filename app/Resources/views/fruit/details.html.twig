@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h2>{{ fruit.name }} : détails</h2>
+
+<div class="row">
+  <div class="col-md-6">
+  <p><strong> <u>Origine :</u> </strong> {{ fruit.origin }}</p>
+
+    <p><strong>Comestible :</strong>
+    {% if fruit.eatable %} oui
+    {% else %} non
+    {% endif %}</p>
+
+
+    <p>
+      <strong>Producteur : </strong>
+      {% if fruit.producer %}
+       {{ fruit.producer.name }}
+        {% else %} non renseigné
+      {% endif %}
+    </p>
+
+    <p>
+      <strong>Détaillant-s : </strong>
+      {% if fruit.retailors | length > 0 %}
+        {% for r in fruit.retailors %}
+         {{ r.name }}
+         {% endfor %}
+        {% else %} non renseigné
+      {% endif %}
+    </p>
+
+    <p>
+      <strong>Catégorie-s : </strong>
+      {% if fruit.category | length > 0 %}
+        {% for c in fruit.category %}
+         <p>{{ c.name }}</p>
+         {% endfor %}
+        {% else %} non renseigné
+      {% endif %}
+    </p>
+  </div>
+  <div class="col-md-6">
+
+  </div>
+</div>
+
+{% endblock body %}

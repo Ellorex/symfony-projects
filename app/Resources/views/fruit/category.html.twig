@@ -1,0 +1,16 @@
+{% extends 'base.html.twig'%}
+
+{% block body %}
+  {{ name }}
+  {% if fruits | length > 0 %}
+    <ul>
+      {% for f in fruits %}
+          <li>{{ f.name }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="alert alert-warning">
+      Aucun fruit correspondant à la catégorie {{ name }}
+    </div>
+  {% endif %}
+{% endblock body %}

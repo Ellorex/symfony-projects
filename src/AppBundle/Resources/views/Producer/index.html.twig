@@ -1,0 +1,17 @@
+{% extends "::base.html.twig" %}
+
+{% block body %}
+<h2>Liste des producteurs :</h2>
+{% for p in producers %}
+  <div>
+    {{ p.name }}
+    {% if p.logo %}
+    <img src="{{ asset('/img/logo/') ~ p.logo }}" >
+    {% endif %}
+    <!-- le tildé permet la concaténation en twig -->
+  </div>
+
+{% endfor %}
+<hr>
+<a href="{{ path('add_producer') }}">Ajouter un producteur</a>
+{% endblock %}

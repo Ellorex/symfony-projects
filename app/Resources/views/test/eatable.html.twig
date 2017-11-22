@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+  <h1>Fruits comestibles</h1>
+
+  <table class="table table-bordered table-striped">
+    <tr>
+      <th>Nom</th>
+      <th>Origine</th>
+      <th>Wiki</th>
+    </tr>
+    {% for f in fruits3 %}
+      <tr>
+        {% if f.eatable == true %}
+          <td>{{ f.name }}</td>
+          <td> {{ f.origin }}</td>
+          <td><a href="{{ f.wiki }}">Wiki</a></td>
+        {% endif %}
+       </tr>
+    {% endfor %}
+  </table>
+{% endblock body %}
