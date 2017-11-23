@@ -145,7 +145,9 @@ $(document).ready(function() {
     var cb2 = cbNonEatable.prop('checked');
 
     var fruitsFiltered = app.data.fruits.filter(function(fruit) {
-      return (fruit.eatable === cb1 || fruit.eatable === cb2);
+
+      return (cb1 && fruit.eatable ) || (cb2 && fruit.eatable !== true);
+
     });
     fruitDisplay.html(transformToHtml(fruitsFiltered, 'table'));
   }
