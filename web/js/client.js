@@ -15,12 +15,18 @@ $(document).ready(function() {
   var btnFruitList  = appHtml.find('button#btnFruitList');
   var fruitDisplay  = appHtml.find('div#fruitDisplay');
   var displaySelect = appHtml.find('select#displaySelect');
+  var fruitDetails  = appHtml.find('div#fruitDetails');
+  var cbEatable = appHtml.find('input#cbEatable');
+  var cbNonEatable = appHtml.find('input#cbNonEatable');
+
+  var elemActive = null;
 
 
   // 2. fonctions
 
   function init() {
     ajaxFruitList(); //appelle la fonction de récupération des fruits
+
   }
 
   var ajaxFn = function() {
@@ -41,32 +47,28 @@ $(document).ready(function() {
   }
 
   var ajaxFruitList = function() {
+    fruitDetails .html('');
+
     // si les données ne sont pas déjà stockées, on les demande au serveur
     if (!app.data.fruits) {
       $.get(app.server + '/fruits/api/list', function(res2) {
         var fruits = JSON.parse(res2);
         app.data.fruits = fruits;
         fruitDisplay.html(transformToHtml(fruits, displaySelect.val()));
-        $('span.displayFruit').click(function() {
-          console.log('zozo');
-        });
-
       });
     } else {
       fruitDisplay.html(transformToHtml(app.data.fruits, displaySelect.val()));
-      $('span.displayFruit').click(function() {
-        console.log('zozo');
-      });
+      }
 
     }
-  }
+
 
   var transformToHtml = function(fruits, type) {
     var output = '';
     if (type == 'list') {
       output += '<ul>';
       fruits.forEach(function(fruit) {
-        output += '<li>' + fruit.name + '</li>';
+        output += '<span><li class="fruitName" id="'+fruit.id+'">' + fruit.name + '</li></span>';
       });
       output += '</ul>';
     }
@@ -84,7 +86,7 @@ $(document).ready(function() {
       // itération sur fruits
       fruits.forEach(function(fruit) {
         output += '<tr>';
-        output += '<td><span class="displayFruit">' + fruit.name + '</span></td>';
+        output += '<td class="fruitName" id="'+fruit.id+'">' + fruit.name + '</td>';
         output += '<td>' + fruit.origin + '</td>';
         if (fruit.eatable == true) {
           output += '<td>' + "Oui" + '</td>';
@@ -104,16 +106,57 @@ $(document).ready(function() {
   }
   // 3. événements
   // au clic sur le bouton btnTestAjax, la fonction ajaxFn est déclenchée
-  var displayFruit  = appHtml.find('span.displayFruit');
+  var displayDetailFruit = function (fruit) {
+    var output = '';
+    output += '<p>' + fruit.name + '</p>';
+    output += '<p>Origine : ' + fruit.origin + '</p>';
 
-  var fruitDetails = function() {
-    console.log('HJHUHU');
+    if (fruit.producer) {
+      output += '<p>Produit par : ' + fruit.producer.name + '</p>';
+      output += '<p>Email du producteur : ' + fruit.producer.email + '</p>';
+      if (fruit.producer.logo) {
+        var url = app.server + '/img/logo/' + fruit.producer.logo;
+        output += '<img src=" '+url+' ">';
+      } else {
+        output += '';
+      }
+    } else {
+      output += '<p>Pas de producteur renseigné</p>';
+    }
+
+    fruitDetails.html(output);
   }
 
+  var detailFruit = function() {
+
+      var id = $(this).attr('id');
+      var url = app.server + '/fruits/api/detail/' + id;
+
+      $.get(url, function(res3) {
+        var fruit = JSON.parse(res3);
+        displayDetailFruit(fruit);
+      });
+      $(this).parent().parent().children('tr').removeClass('custom-active');
+      $(this).parent().addClass("custom-active");
+  }
+
+  var filterByEatable = function() {
+    var cb1 = cbEatable.prop('checked');
+    var cb2 = cbNonEatable.prop('checked');
+
+    var fruitsFiltered = app.data.fruits.filter(function(fruit) {
+      return (fruit.eatable === cb1 || fruit.eatable === cb2);
+    });
+    fruitDisplay.html(transformToHtml(fruitsFiltered, 'table'));
+  }
   btnTestAjax.click(ajaxFn);
   btnFruitList.click(ajaxFruitList);
   displaySelect.change(ajaxFruitList);
-  // displayFruit.click(fruitDetails);
+
+  fruitDisplay.on('click', '.fruitName', detailFruit);
+
+  cbEatable.on('click', filterByEatable);
+  cbNonEatable.on('click', filterByEatable);
 
   init();
 });

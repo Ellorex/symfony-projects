@@ -179,7 +179,7 @@ class FruitController extends Controller {
  public function ajaxFruitListAction() {
    $fruits = $this->getDoctrine()
     ->getRepository(Fruit::class)
-    ->findAll();
+    ->findFruitsOrderedByName();
 
     // tentative d'encodage en JSON mais impossible d'encoder des objets PHP. Json fonctionne avec des tableaux associatifs
     // $fruits_json = json_encode($fruits);
@@ -203,6 +203,52 @@ class FruitController extends Controller {
     //encodage en json du tableau associatif
     $fruits_json = json_encode($fruits_array);
     return new Response($fruits_json);
+ }
+
+ /**
+ *@Route("/api/detail/{id}")
+ */
+ public function ajaxDetailFruitAction($id) {
+   $fruit = $this->getDoctrine()
+    ->getRepository(Fruit::class)
+    ->find($id);
+
+    $fruit_array = [
+        'id' => $fruit->getId(),
+        'name' => $fruit->getName(),
+        'origin' => $fruit->getOrigin(),
+        ];
+        $eatable = ($fruit->getEatable()) ? 'Oui' : 'Non';
+        $fruit_array['eatable'] = $eatable;
+
+        if ($fruit->getProducer()) {
+          $p = $fruit->getProducer();
+          $producer_array = [
+            'id' => $p->getId(),
+            'name' => $p->getName(),
+            ];
+            $producer_array['email'] = ($p->getEmail()) ? $p->getEmail() : '';
+            $producer_array['logo'] = ($p->getLogo()) ? $p->getLogo() : '';
+
+            $fruit_array['producer'] = $producer_array;
+        } else {
+          $fruit_array['producer'] = null;
+        }
+
+
+          if (sizeof($fruit->getRetailors()) > 0) {
+            $retailors_array = [];
+            foreach ($fruit->getRetailors() as $r) {
+              $retailors_array[] = ['id' => $r->getId(), 'name' => $r->getName()];
+            }
+            $fruit_array['retailors'] = $retailors_array;
+          } else {
+            $fruit_array['retailors'] = null;
+          }
+
+    $fruit_json = json_encode($fruit_array);
+   return new Response($fruit_json);
+
  }
 
 }

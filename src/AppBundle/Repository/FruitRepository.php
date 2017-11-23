@@ -36,4 +36,10 @@ class FruitRepository extends \Doctrine\ORM\EntityRepository
   //     ->getResult();
   // }
 
+  public function findFruitsOrderedByName() {
+    // requête DQL (Doctrine Query Language = SQL + couche objet)
+    return $this->getEntityManager()
+      ->createQuery('SELECT f FROM AppBundle:Fruit f ORDER BY f.name ASC')
+      ->getResult();
+  }
 }

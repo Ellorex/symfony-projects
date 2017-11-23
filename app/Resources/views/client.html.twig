@@ -1,5 +1,14 @@
 {% extends 'base.html.twig' %}
 
+{% block styles %}
+  <style>
+    #btnTestAjax, #btnFruitList { display: none; }
+    #fruitName { cursor: pointer; }
+    .custom-active { background-color:
+	 #ffd699 !important; }
+  </style>
+{% endblock styles %}
+
 {% block body %}
 
 <h2>Ajax</h2>
@@ -9,22 +18,28 @@
 
   <button type="button" id="btnTestAjax" class="btn btn-primary">Test Ajax</button>
   <button type="button" id="btnFruitList" class="btn btn-primary">Liste des fruits</button>
-  Afficher en tant que
-  <select id="displaySelect">
-    <option value="list">Liste </option>
-    <option value="table">Tableau</option>
-  </select>
+
 
   <div class="container">
     <div class="row">
 
       <div class="col-md-8">
+        Afficher en tant que
+        <select id="displaySelect">
+          <option value="table">Tableau</option>
+          <option value="list">Liste </option>
+        </select>
+        <input id="cbEatable" type="checkbox" checked>Comestible
+        <input id="cbNonEatable" type="checkbox" checked>Non comestible
+        <hr>
+
         <div id="fruitDisplay">
         </div>
       </div>
 
       <div class="col-md-4">
-        <div>Détails
+        Détails
+        <div id="fruitDetails">
         </div>
       </div>
 
