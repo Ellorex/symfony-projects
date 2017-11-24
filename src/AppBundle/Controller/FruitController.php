@@ -77,11 +77,11 @@ class FruitController extends Controller {
         ->getDoctrine()
         ->getRepository(Category::class)
         ->findAll();
-  return $this->render('fruit/index.html.twig', array(
-    'fruits' => $fruits,
-    'producer_id' => $producers,
-    'category' => $category
-    ));
+    return $this->render('fruit/index.html.twig', array(
+      'fruits' => $fruits,
+      'producer_id' => $producers,
+      'category' => $category
+      ));
   }
 
 /**
@@ -251,4 +251,23 @@ class FruitController extends Controller {
 
  }
 
+ /**
+* @Route("/api/post")
+*/
+  public function ajaxPostAction(Request $request) {
+    $name = $request->request->get('name');
+    $sports = $request->request->get('sports');
+
+    return new Response(
+      $name . ' est une experte en '. $sports[0]['name']);
+
+  }
+
+  /**
+  *@Route("/api/like/{id}")
+  */
+  public function ajaxThumAction(Request $request, $id) {
+    $thumb = $request->request->get('thumb');
+    return new Response();
+  }
 }

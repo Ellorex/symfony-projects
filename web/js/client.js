@@ -16,8 +16,11 @@ $(document).ready(function() {
   var fruitDisplay  = appHtml.find('div#fruitDisplay');
   var displaySelect = appHtml.find('select#displaySelect');
   var fruitDetails  = appHtml.find('div#fruitDetails');
-  var cbEatable = appHtml.find('input#cbEatable');
-  var cbNonEatable = appHtml.find('input#cbNonEatable');
+  var cbEatable     = appHtml.find('input#cbEatable');
+  var cbNonEatable  = appHtml.find('input#cbNonEatable');
+  var search        = appHtml.find('input#search');
+  var thumb         = appHtml.find('i.thumb');
+
 
   var elemActive = null;
 
@@ -77,10 +80,11 @@ $(document).ready(function() {
 
       output += '<table id="fruitTable" class="table table-bordered">';
       output += '<tr>';
-      output += '<th>' + 'Nom' + '</th>';
-      output += '<th>' + 'Origine' + '</th>';
-      output += '<th>' + 'Comestible' + '</th>';
-      output += '<th>' + 'Producteur' + '</th>';
+      output += '<th>Nom</th>';
+      output += '<th>Origine</th>';
+      output += '<th>Comestible</th>';
+      output += '<th>Producteur</th>';
+      output += '<th>Popularité</th>';
       output += '</tr>';
 
       // itération sur fruits
@@ -98,6 +102,7 @@ $(document).ready(function() {
         } else {
           output += '<td>' + "Non renseigné" + '</td>';
         }
+        output += '<td><i class="fa fa-thumbs-up thumb"></i></td>'
         });
       output += '</tr>';
       output += '</table>';
@@ -146,19 +151,57 @@ $(document).ready(function() {
 
     var fruitsFiltered = app.data.fruits.filter(function(fruit) {
 
-      return (cb1 && fruit.eatable ) || (cb2 && fruit.eatable !== true);
+      return (cb1 && fruit.eatable ) || (cb2 && !fruit.eatable);
 
     });
     fruitDisplay.html(transformToHtml(fruitsFiltered, 'table'));
   }
-  btnTestAjax.click(ajaxFn);
+
+  var filterByKeyword = function(e) {
+    var input = $(this).val();
+    var fruitsFiltered = app.data.fruits.filter(function(fruit) {
+      var test = true;
+      test = fruit.name.toLowerCase().indexOf(input.toLowerCase()) !== -1;
+      test += fruit.origin.toLowerCase().indexOf(input.toLowerCase()) !== -1;
+      return test;
+    });
+    fruitDisplay.html(transformToHtml(fruitsFiltered, 'table'));
+  }
+
+
+
+  var displayLikes = function() {
+    console.log('ghjd');
+  }
+
+  var ajaxPost = function (e) {
+    var url = app.server + '/fruits/api/post';
+
+    //données envoyées au serveur, elles seront automatiquement converties en JSON
+    var data = {
+      id: 75,
+      name: search.val(),
+      sports:[
+        {id: 1, name: 'curling'},
+        {id: 2, name: 'GAA'}
+      ]
+    };
+    $.post(url, data, function(res) {
+      console.log(res);
+    });
+  }
+
+  btnTestAjax.click(ajaxPost);
   btnFruitList.click(ajaxFruitList);
   displaySelect.change(ajaxFruitList);
 
   fruitDisplay.on('click', '.fruitName', detailFruit);
+  fruitDisplay.on('click', '.thumb', displayLikes);
 
   cbEatable.on('click', filterByEatable);
   cbNonEatable.on('click', filterByEatable);
+  search.on('keyup', filterByKeyword);
+  thumb.on('click', displayLikes);
 
   init();
 });

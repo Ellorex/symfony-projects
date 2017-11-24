@@ -2,7 +2,7 @@
 
 {% block styles %}
   <style>
-    #btnTestAjax, #btnFruitList { display: none; }
+    #btnFruitList { display: none; }
     #fruitName { cursor: pointer; }
     .custom-active { background-color:
 	 #ffd699 !important; }
@@ -16,14 +16,15 @@
 <div id="appHtml">
 
 
-  <button type="button" id="btnTestAjax" class="btn btn-primary">Test Ajax</button>
-  <button type="button" id="btnFruitList" class="btn btn-primary">Liste des fruits</button>
 
 
   <div class="container">
     <div class="row">
 
       <div class="col-md-8">
+          <button type="button" id="btnTestAjax" class="btn btn-primary">Test Ajax</button>
+          <button type="button" id="btnFruitList" class="btn btn-primary">Liste des fruits</button>
+        <hr>
         Afficher en tant que
         <select id="displaySelect">
           <option value="table">Tableau</option>
@@ -31,6 +32,7 @@
         </select>
         <input id="cbEatable" type="checkbox" checked>Comestible
         <input id="cbNonEatable" type="checkbox" checked>Non comestible
+        <input type="text" id="search" placeholder="Recherche">
         <hr>
 
         <div id="fruitDisplay">
